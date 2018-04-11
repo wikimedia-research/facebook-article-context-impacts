@@ -19,7 +19,7 @@ AND is_pageview = TRUE
 --all referers from facebook should by classified as external
 AND referer_class = 'external'
 AND http_status IN ('200', '304')
---remove bots and spiders
+--remove bots
 AND agent_type = 'user'
 -- only look at English Wikipedia pageviews in the US
 AND normalized_host.project = 'en'  
@@ -37,7 +37,7 @@ readr::write_rds(daily_pageviews_fb, "daily_pageviews_fb.rds", "gz")
 system("scp mneisler@stat5:/home/mneisler/daily_pageviews_fb.rds daily_pageviews_fb.rds")
 
 
-#Look at pageviews with facebook referrer broken down by access method 
+#Daily pageviews with facebook referrer broken down by access method 
 
 #Remotely from Stat005
 
@@ -73,7 +73,7 @@ readr::write_rds(daily_pageviews_fb_bymethod, "daily_pageviews_fb_bymethod.rds",
 system("scp mneisler@stat5:/home/mneisler/daily_pageviews_fb_bymethod.rds daily_pageviews_fb_bymethod.rds")
 
 
-#Look at some popular facebook daily US newspapers to see pageview impacts on those pages.
+#Break down by popular facebook daily US newspapers to see pageview impacts on those pages.
 #Remotely from Stat005
 
 start_date <- as.Date("2018-03-20")
@@ -98,7 +98,7 @@ AND (uri_path LIKE '%/The_Washington_Post%'
      OR uri_path LIKE '%/New_York_Post' 
      OR uri_path LIKE '%/The_New_York_Times'
      OR uri_path LIKE '%/The_Guardian'
-      OR uri_path LIKE '%/BBC_News'
+    OR uri_path LIKE '%/Associated_Press'
 )
 AND normalized_host.project = 'en'  
 AND normalized_host.project_class = 'wikipedia'
