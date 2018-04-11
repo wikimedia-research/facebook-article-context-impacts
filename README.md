@@ -28,6 +28,6 @@ A breakdown by access method shows a small increase in English Wikipedia pagevie
 
 ![](figures/daily_pageviews_bynews.png)
 
-A plot of daily pageviews in the US to English Wikipedia pages on some popular US news sources helps highlight some of the impacts of the new Facebook feature. There is sharp increase of pageviews to these pages from Facebook on April 3rd. Daily pageviews increase from a total of 17 pageviews on April 2nd to a peak of 425 pageviews on April 4th. After April 4th, the pageviews appear to start to decrease again.  
+A plot of daily pageviews in the US to English Wikipedia pages on some popular US news sources helps highlight some of the impacts of the new Facebook feature. There is sharp increase of pageviews to these pages from Facebook on April 3rd. Daily pageviews increase from a total of 17 pageviews on April 2nd to a peak of 1431 pageviews on April 4th. After April 4th, the pageviews appear to start to decrease again to arouund 500.  
 
 Further review of these trends in the coming weeks will be useful to identify if the rollout resulted in any sustained changes. 

@@ -55,6 +55,7 @@ daily_pageviews_bynews$url <- sub(".*(The_Wall_Street_Journal).*", "The Wall Str
 daily_pageviews_bynews$url <- sub(".*(New_York_Post).*", "New York Post", daily_pageviews_bynews$url)
 daily_pageviews_bynews$url <- sub(".*(The_New_York_Times).*", "The New York Times", daily_pageviews_bynews$url)
 daily_pageviews_bynews$url <- sub(".*(The_Guardian).*", "The Guardian", daily_pageviews_bynews$url)
+daily_pageviews_bynews$url <- sub(".*(BBC_News).*", "BBC News", daily_pageviews_bynews$url)
 
 
 p <- ggplot(daily_pageviews_bynews, aes(x = date, y = requests, fill = url)) +

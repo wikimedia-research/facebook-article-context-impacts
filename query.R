@@ -98,6 +98,7 @@ AND (uri_path LIKE '%/The_Washington_Post%'
      OR uri_path LIKE '%/New_York_Post' 
      OR uri_path LIKE '%/The_New_York_Times'
      OR uri_path LIKE '%/The_Guardian'
+      OR uri_path LIKE '%/BBC_News'
 )
 AND normalized_host.project = 'en'  
 AND normalized_host.project_class = 'wikipedia'
