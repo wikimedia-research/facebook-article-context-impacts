@@ -7,7 +7,7 @@ fig_path <- file.path("figures")
 plot_resolution <- 192
 
 #plot daily enwiki pageviews from US by facebook referer
-daily_pageviews_fb <- rbind(readr::read_rds("data/daily_pageviews_fb_v3.rds")) %>%
+daily_pageviews_fb <- rbind(readr::read_rds("data/daily_pageviews_fb_v2.rds")) %>%
   mutate(date = lubridate::ymd(date)) 
 
 p <- ggplot(daily_pageviews_fb, aes(x = date, y = requests)) +
@@ -24,6 +24,7 @@ p <- ggplot(daily_pageviews_fb, aes(x = date, y = requests)) +
   
 ggsave("daily_pageviews_fb.png", p, path = fig_path, units = "in", dpi = plot_resolution, height = 6, width = 10, limitsize = FALSE)
 rm(p)
+
 
 #plot daily enwiki pageviews from US by facebook referer broken down by access method (mobile web, desktop)
 daily_pageviews_fb_bymethod <- rbind(readr::read_rds("data/daily_pageviews_fb_bymethod.rds")) %>%
@@ -47,7 +48,7 @@ rm(p)
 
 
 #Plot of daily pageviews broken down by some popular US news sources that include article context feature.
-daily_pageviews_bynews <- rbind(readr::read_rds("data/daily_pageviews_bynews_v2.rds")) %>%
+daily_pageviews_bynews <- rbind(readr::read_rds("data/daily_pageviews_bynews_v3.rds")) %>%
   mutate(date = lubridate::ymd(date))
 
 #simplify url names
@@ -59,6 +60,7 @@ daily_pageviews_bynews$url <- sub(".*(The_Guardian).*", "The Guardian", daily_pa
 daily_pageviews_bynews$url <- sub(".*(The_Daily_Wire).*", "The Daily Wire", daily_pageviews_bynews$url)
 daily_pageviews_bynews$url <- sub(".*(Breitbart_News).*", "Breitbart News", daily_pageviews_bynews$url)
 daily_pageviews_bynews$url <- sub(".*(Vox).*", "Vox (website)", daily_pageviews_bynews$url)
+daily_pageviews_bynews$url <- sub(".*(Fox_News).*", "Fox News", daily_pageviews_bynews$url)
 
 
 #calculate daily total
@@ -74,7 +76,7 @@ p <- ggplot() +
   geom_text(aes(x=as.Date('2018-04-03'), y=3000, label="Facebook Article Context Feature Launch Date"), size=3, vjust = -1.2, angle = 90, color = "black") +
   scale_y_continuous("pageviews (bots excluded)", labels = polloi::compress) +
   scale_x_date(labels = date_format("%d-%b-%y"), date_breaks = "1 day") +
-  scale_fill_brewer("News media page", palette = "Set2") +
+  scale_fill_brewer("News media page", palette = "Set3") +
   ggthemes::theme_tufte(base_size = 12, base_family = "Gill Sans") +
   theme(axis.text.x=element_text(angle = 45, hjust = 1),
         panel.grid = element_line("gray70")) +
@@ -84,6 +86,14 @@ p <- ggplot() +
 ggsave("daily_pageviews_bynews.png", p, path = fig_path, units = "in", dpi = plot_resolution, height = 6, width = 10, limitsize = FALSE)
 rm(p)
 
+#Find avg pageviews before and after broken down by popular news sources
+pv_avg_prior <- daily_pageviews_bynews %>%
+  filter(date >= '2018-03-26' & date <= '2018-04-02') %>%
+  summarise(avg_views = mean(requests))
+
+pv_avg_week_after <- daily_pageviews_bynews %>%
+  filter(date >= '2018-04-11' & date <= '2018-04-18') %>%
+  summarise(avg_views = mean(requests))
 
 #Top English Wikipedia pages with a facebook referrer 
 
@@ -94,23 +104,25 @@ knitr::kable(top30_fromfb_Apr4)
 
 ##Top pages (urls) a week before and after rollout date on April 4th.
 
-#top 50 pages before article context rollout
+#top 30 pages before article context rollout
 top_n_fromfb_prior <- rbind(readr::read_rds("data/top_n_fromfb_prior.rds")) %>%
   group_by(url) %>%
   summarise(pageviews = sum(requests)) %>%
-  top_n(50, pageviews) %>%
+  top_n(30, pageviews) %>%
   arrange(desc(pageviews))
 
 #add row ID number to see ranking
-top_n_fromfb_prior$ID <- seq.int(nrow(top_n_fromfb_prior))
+top_n_fromfb_prior$No. <- seq.int(nrow(top_n_fromfb_prior))
+top_n_fromfb_prior<- top_n_fromfb_prior[c(3,1,2)]
 knitr::kable(top_n_fromfb_prior)
 
 #top 50 pages after article context rollout
 top_n_fromfb_after <- rbind(readr::read_rds("data/top_n_fromfb_after.rds")) %>%
   group_by(url) %>%
   summarise(pageviews = sum(requests)) %>%
-  top_n(50, pageviews) %>%
+  top_n(30, pageviews) %>%
   arrange(desc(pageviews))
 
-top_n_fromfb_after$ID <- seq.int(nrow(top_n_fromfb_after))
+top_n_fromfb_after$No. <- seq.int(nrow(top_n_fromfb_after))
+top_n_fromfb_after<- top_n_fromfb_after[c(3,1,2)]
 knitr::kable(top_n_fromfb_after)

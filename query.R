@@ -1,10 +1,10 @@
 #Impact of Facebook About Article Feature on EnWiki Pageviews. 
 
-#Daily number of enwiki pageviews in the US with a referrer from Facebook"
+#Daily number of enwiki pageviews in the US with a referrer from Facebook
 #Remotely from Stat005
 
 start_date <- as.Date("2018-03-26")
-end_date <- as.Date("2018-04-15")
+end_date <- as.Date("2018-04-21")
 
 daily_pageviews_fb<- do.call(rbind, lapply(seq(start_date, end_date, "day"), function(date) {
   cat("Fetching webrequest data from ", as.character(date), "\n")
@@ -31,10 +31,10 @@ results <- wmf::query_hive(query)
 return(results)
 }))
 
-readr::write_rds(daily_pageviews_fb, "daily_pageviews_fb.rds", "gz")
+readr::write_rds(daily_pageviews_fb, "daily_pageviews_fb_v2.rds", "gz")
 
 #LOCAL
-system("scp mneisler@stat5:/home/mneisler/daily_pageviews_fb.rds daily_pageviews_fb.rds")
+system("scp mneisler@stat5:/home/mneisler/daily_pageviews_fb_v2.rds daily_pageviews_fb_v2.rds")
 
 
 #Daily pageviews with facebook referrer broken down by access method 
@@ -77,7 +77,7 @@ system("scp mneisler@stat5:/home/mneisler/daily_pageviews_fb_bymethod.rds daily_
 #Remotely from Stat005
 
 start_date <- as.Date("2018-03-26")
-end_date <- as.Date("2018-04-15")
+end_date <- as.Date("2018-04-25")
 
 daily_pageviews_bynews<- do.call(rbind, lapply(seq(start_date, end_date, "day"), function(date) {
   cat("Fetching webrequest data from ", as.character(date), "\n")
@@ -101,6 +101,7 @@ AND (uri_path LIKE '%/The_Washington_Post%'
      OR uri_path LIKE '%/The_Daily_Wire'
      OR uri_path LIKE '%/Breitbart_News'
      OR uri_path LIKE '%/Vox_(website)'
+    OR uri_path LIKE '%/Fox_News'
 )
 AND normalized_host.project = 'en'  
 AND normalized_host.project_family = 'wikipedia'
@@ -112,11 +113,10 @@ results <- wmf::query_hive(query)
 return(results)
 }))
 
-
-readr::write_rds(daily_pageviews_bynews, "daily_pageviews_bynews_v2.rds", "gz")
+readr::write_rds(daily_pageviews_bynews, "daily_pageviews_bynews_v3.rds", "gz")
 
 #LOCAL
-system("scp mneisler@stat5:/home/mneisler/daily_pageviews_bynews_v2.rds daily_pageviews_bynews_v2.rds")
+system("scp mneisler@stat5:/home/mneisler/daily_pageviews_bynews_v3.rds daily_pageviews_bynews_v3.rds")
 
 
 #Find Top 30 pages a week before release date. 
